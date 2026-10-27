@@ -1,0 +1,137 @@
+{
+  "info": {
+    "name": "Data Fusion App",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": "Ingest imagery, watch points, FMV inferences, time series, AIS reports, and vessel ownership, then read fused insights."
+  },
+  "variable": [
+    {"key": "baseUrl", "value": "http://localhost:8000"}
+  ],
+  "item": [
+    {
+      "name": "Ingest imagery",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "url": "{{baseUrl}}/api/v1/ingest/imagery",
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {"key": "file", "type": "file", "src": ""},
+            {"key": "modality", "type": "text", "value": "eo"},
+            {"key": "metadata", "type": "text", "value": "{\"sensor\":\"example\",\"gsd_m\":0.5}"},
+            {"key": "captured_at", "type": "text", "value": "2026-03-01T12:00:00Z"},
+            {"key": "latitude", "type": "text", "value": "21.3"},
+            {"key": "longitude", "type": "text", "value": "-157.8"},
+            {"key": "external_id", "type": "text", "value": "scene-001"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Ingest watch point",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": "{{baseUrl}}/api/v1/ingest/watchpoint",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"watchpoint_id\": \"watchpoint-id\",\n  \"project_id\": \"project-id\",\n  \"time_start\": \"2026-03-01T00:00:00Z\",\n  \"time_end\": \"2026-03-02T00:00:00Z\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Ingest FMV",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": "{{baseUrl}}/api/v1/ingest/fmv",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"model_id\": \"model-id\",\n  \"feed_id\": \"feed-id\",\n  \"time_start\": \"2026-03-01T00:00:00Z\",\n  \"time_end\": \"2026-03-01T01:00:00Z\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Ingest time series",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": "{{baseUrl}}/api/v1/ingest/timeseries",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"modality\": \"radar\",\n  \"source_id\": \"radar-1\",\n  \"samples\": [\n    {\"time\": \"2026-03-01T12:00:00Z\", \"value\": 1.4, \"channel\": \"doppler\", \"latitude\": 21.3, \"longitude\": -157.8}\n  ]\n}"
+        }
+      }
+    },
+    {
+      "name": "Ingest AIS",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": "{{baseUrl}}/api/v1/ingest/ais",
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"mmsi\": 211234560,\n  \"vessel_name\": \"NORDIC MARINER\",\n  \"call_sign\": \"DJ7B2\",\n  \"imo\": 9432105,\n  \"vessel_type\": 70,\n  \"vessel_type_cargo\": \"Cargo - All ships of this type\",\n  \"length\": 185,\n  \"width\": 28,\n  \"draft\": 8.5,\n  \"timestamp\": \"2026-10-15T09:42:15Z\",\n  \"latitude\": 53.5412,\n  \"longitude\": 9.9124,\n  \"speed_over_ground_knots\": 12.4,\n  \"course_over_ground_degrees\": 264.5,\n  \"heading_degrees\": 266,\n  \"navigational_status_code\": 0,\n  \"navigational_status\": \"Underway using engine\",\n  \"destination\": \"HAMBURG\",\n  \"eta\": \"10-15 11:30\"\n}"
+        }
+      }
+    },
+    {
+      "name": "Ingest ownership",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "url": "{{baseUrl}}/api/v1/ingest/ownership",
+        "body": {
+          "mode": "raw",
+          "raw": "[\n  {\n    \"vessel_name\": \"ADLER\",\n    \"imo\": \"9179854\",\n    \"mmsi\": \"273414440\",\n    \"call_sign\": \"UGPS\",\n    \"flag_current\": \"russian federation\",\n    \"vessel_type\": \"Ro-Ro Cargo Ship\",\n    \"sanctions\": \"USA\",\n    \"source_url\": \"https://example.test/vessels/1\"\n  }\n]"
+        }
+      }
+    },
+    {
+      "name": "Get job",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/jobs/{{jobId}}"
+      }
+    },
+    {
+      "name": "List insights",
+      "request": {
+        "method": "GET",
+        "url": {
+          "raw": "{{baseUrl}}/api/v1/insights?entity=&place=&time_start=&time_end=",
+          "host": ["{{baseUrl}}"],
+          "path": ["api", "v1", "insights"],
+          "query": [
+            {"key": "entity", "value": ""},
+            {"key": "place", "value": ""},
+            {"key": "time_start", "value": ""},
+            {"key": "time_end", "value": ""}
+          ]
+        }
+      }
+    },
+    {
+      "name": "Get insight",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/insights/{{insightId}}"
+      }
+    },
+    {
+      "name": "Run fusion",
+      "request": {
+        "method": "POST",
+        "url": "{{baseUrl}}/api/v1/fusion/run"
+      }
+    },
+    {
+      "name": "Corroboration status",
+      "request": {
+        "method": "GET",
+        "url": "{{baseUrl}}/api/v1/corroboration?query="
+      }
+    }
+  ]
+}

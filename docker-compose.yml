@@ -1,0 +1,122 @@
+services:
+  postgres:
+    image: docker.io/library/postgres:16
+    environment:
+      POSTGRES_USER: fusion
+      POSTGRES_PASSWORD: fusion
+      POSTGRES_DB: fusion
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./sql/postgres/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+      - ./sql/postgres/002_ais.sql:/docker-entrypoint-initdb.d/002_ais.sql:ro
+      - ./sql/postgres/003_vessel_ownership.sql:/docker-entrypoint-initdb.d/003_vessel_ownership.sql:ro
+      - ./sql/postgres/004_osint.sql:/docker-entrypoint-initdb.d/004_osint.sql:ro
+      - ./sql/postgres/005_intel.sql:/docker-entrypoint-initdb.d/005_intel.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fusion -d fusion"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  timescaledb:
+    image: docker.io/timescale/timescaledb:2.21.0-pg16
+    environment:
+      POSTGRES_USER: fusion
+      POSTGRES_PASSWORD: fusion
+      POSTGRES_DB: fusion
+    ports:
+      - "5433:5432"
+    volumes:
+      - timescale-data:/var/lib/postgresql/data
+      - ./sql/timescale/001_init.sql:/docker-entrypoint-initdb.d/001_init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U fusion -d fusion"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  minio:
+    # Official minio images are no longer anonymously pullable. Silo is a
+    # MinIO-compatible server with the same S3 API and MINIO_* settings.
+    image: docker.io/pgsty/silo:RELEASE.2026-09-16T00-00-00Z
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: minio
+      MINIO_ROOT_PASSWORD: minio-secret
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://127.0.0.1:9000/minio/health/live"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      POSTGRES_URL: postgresql+psycopg://fusion:fusion@postgres:5432/fusion
+      TIMESCALE_URL: postgresql+psycopg://fusion:fusion@timescaledb:5432/fusion
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio-secret
+      MINIO_BUCKET: fusion
+      MINIO_SECURE: "false"
+      CHARIOT_CREDENTIALS_FILE: /credentials/data-fusion-app.json
+      CHARIOT_DETECTION_MODEL_ID: ${CHARIOT_DETECTION_MODEL_ID:-}
+      CHARIOT_VLM_MODEL_ID: ${CHARIOT_VLM_MODEL_ID:-}
+      CHARIOT_WORKFLOW_ID: ${CHARIOT_WORKFLOW_ID:-}
+      CHARIOT_FUSION_AGENT: ${CHARIOT_FUSION_AGENT:-Data Fusion Orchestrator}
+      MCP_PUBLIC_URL: ${MCP_PUBLIC_URL:-http://localhost:8000/mcp/}
+    volumes:
+      - ./data-fusion-app.json:/credentials/data-fusion-app.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/health')\""]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  worker:
+    build: .
+    command: ["python", "-m", "app.worker"]
+    environment:
+      POSTGRES_URL: postgresql+psycopg://fusion:fusion@postgres:5432/fusion
+      TIMESCALE_URL: postgresql+psycopg://fusion:fusion@timescaledb:5432/fusion
+      MINIO_ENDPOINT: minio:9000
+      MINIO_ACCESS_KEY: minio
+      MINIO_SECRET_KEY: minio-secret
+      MINIO_BUCKET: fusion
+      MINIO_SECURE: "false"
+      CHARIOT_CREDENTIALS_FILE: /credentials/data-fusion-app.json
+      CHARIOT_DETECTION_MODEL_ID: ${CHARIOT_DETECTION_MODEL_ID:-}
+      CHARIOT_VLM_MODEL_ID: ${CHARIOT_VLM_MODEL_ID:-}
+      CHARIOT_WORKFLOW_ID: ${CHARIOT_WORKFLOW_ID:-}
+      CHARIOT_FUSION_AGENT: ${CHARIOT_FUSION_AGENT:-Data Fusion Orchestrator}
+      MCP_PUBLIC_URL: ${MCP_PUBLIC_URL:-http://localhost:8000/mcp/}
+    volumes:
+      - ./data-fusion-app.json:/credentials/data-fusion-app.json:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      timescaledb:
+        condition: service_healthy
+      minio:
+        condition: service_healthy
+
+volumes:
+  postgres-data:
+  timescale-data:
+  minio-data:

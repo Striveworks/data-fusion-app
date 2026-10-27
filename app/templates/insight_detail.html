@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}{{ insight.subject }}{% endblock %}
+{% block body %}
+<p><a href="/">All insights</a></p>
+<section class="panel">
+  <h2 style="margin-top:0;">{{ insight.subject }}</h2>
+  <p>{{ insight.summary or "No summary." }}</p>
+  <dl>
+    <dt>Status</dt><dd class="status {{ insight.status }}">{{ insight.status }}</dd>
+    <dt>Place</dt><dd>{{ insight.place_name or "—" }}</dd>
+    <dt>Entities</dt><dd>{{ insight.entity_labels | join(", ") or "—" }}</dd>
+    <dt>Time</dt><dd>{{ insight.time_start or "—" }} – {{ insight.time_end or "—" }}</dd>
+    <dt>Confidence</dt><dd>{{ insight.confidence if insight.confidence is not none else "—" }}</dd>
+    <dt>Coordinates</dt><dd>{{ insight.latitude if insight.latitude is not none else "—" }}, {{ insight.longitude if insight.longitude is not none else "—" }}</dd>
+    <dt>Supersedes</dt><dd>{{ insight.supersedes_id or "—" }}</dd>
+  </dl>
+  <h3>Evidence</h3>
+  <pre>{{ insight.evidence }}</pre>
+</section>
+<section class="panel">
+  <h2 style="margin-top:0; font-size:1.05rem;">Corroboration for this subject</h2>
+  <div class="sources">
+    {% for source in sources %}
+    <div class="source">
+      <strong>{{ source.source }}</strong>
+      <div class="status {{ source.status }}">{{ source.status }}</div>
+      <div class="meta">{{ source.results | length }} results</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

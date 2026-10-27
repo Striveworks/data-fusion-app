@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block body %}
+<section class="panel">
+  <form class="filters" method="get" action="/">
+    <div>
+      <label for="entity">Entity</label>
+      <input id="entity" name="entity" value="{{ filters.entity }}" placeholder="vessel, unit, person">
+    </div>
+    <div>
+      <label for="place">Place</label>
+      <input id="place" name="place" value="{{ filters.place }}" placeholder="port, grid, region">
+    </div>
+    <div>
+      <label for="time_start">From</label>
+      <input id="time_start" name="time_start" value="{{ filters.time_start }}" placeholder="2026-01-01T00:00:00Z">
+    </div>
+    <div>
+      <label for="time_end">To</label>
+      <input id="time_end" name="time_end" value="{{ filters.time_end }}" placeholder="2026-01-02T00:00:00Z">
+    </div>
+    <button type="submit">Filter</button>
+  </form>
+</section>
+
+<section class="panel">
+  <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+    <h2 style="margin:0; font-size:1.05rem;">Active insights</h2>
+    <div class="actions">
+      <a class="button secondary" href="/ingest">Add data</a>
+      <form method="post" action="/fusion/run">
+        <button class="secondary" type="submit">Run fusion</button>
+      </form>
+    </div>
+  </div>
+  {% if insights %}
+  <table>
+    <thead>
+      <tr>
+        <th>Subject</th>
+        <th>Place</th>
+        <th>Entities</th>
+        <th>Time</th>
+        <th>Confidence</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for insight in insights %}
+      <tr>
+        <td><a href="/insights/{{ insight.id }}">{{ insight.subject }}</a><div class="meta">{{ insight.summary }}</div></td>
+        <td>{{ insight.place_name or "—" }}</td>
+        <td>{{ insight.entity_labels | join(", ") or "—" }}</td>
+        <td class="meta">{{ insight.time_start or "—" }}<br>{{ insight.time_end or "" }}</td>
+        <td>{{ insight.confidence if insight.confidence is not none else "—" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">No active insights match these filters.</p>
+  {% endif %}
+</section>
+
+<section class="panel">
+  <h2 style="margin-top:0; font-size:1.05rem;">Corroboration sources</h2>
+  <div class="sources">
+    {% for source in sources %}
+    <div class="source">
+      <strong>{{ source.source }}</strong>
+      <div class="status {{ source.status }}">{{ source.status }}</div>
+      <div class="meta">{% if source.count is defined and source.count is not none %}{{ source.count }} records{% else %}{{ source.results | length }} results{% endif %}</div>
+    </div>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="panel">
+  <h2 style="margin-top:0; font-size:1.05rem;">Recent jobs</h2>
+  {% if jobs %}
+  <table>
+    <thead>
+      <tr><th>Kind</th><th>Status</th><th>Created</th><th>Error</th></tr>
+    </thead>
+    <tbody>
+      {% for job in jobs %}
+      <tr>
+        <td>{{ job.kind }}</td>
+        <td class="status {{ job.status }}">{{ job.status }}</td>
+        <td class="meta">{{ job.created_at }}</td>
+        <td>{{ job.error or "" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <p class="empty">No jobs yet.</p>
+  {% endif %}
+</section>
+{% endblock %}

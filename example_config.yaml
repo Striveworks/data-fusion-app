@@ -1,0 +1,226 @@
+# Demonstration of Forge -- private equity evaluation workflow involving a Drafting Agent,
+# a Valuation Agent, and a Board of Directors Agent. Goal is to assemble an acquisition
+# portfolio on a target company that scores well. The Board Agent lets the user explore and
+# switch between board guidance documents. The drafter researches the target with its data
+# tools, composes the portfolio, and hands it to the Valuation Agent; the Valuation Agent
+# retrieves the active guidance and scores the portfolio across the diligence categories.
+# Scores are artifacts. The drafter gets the scores back in raw but can also see them as
+# artifacts.
+shared:
+  - name: PE shared data
+    key: pe-shared-data
+    description: Shared assets among the agents
+    data:
+      acquisition_threshold: 90
+      max_portfolio_retries: 2
+      max_portfolio_length: 600
+      tool_display:
+        templates:
+          get_company_financials:
+            executing: "Pulling company financials..."
+            deferred: "Pull company financials"
+          get_leadership_profile:
+            executing: "Profiling leadership team..."
+            deferred: "Profile leadership team"
+          get_market_landscape:
+            executing: "Surveying market landscape..."
+            deferred: "Survey market landscape"
+          get_operational_metrics:
+            executing: "Gathering operational metrics..."
+            deferred: "Gather operational metrics"
+          get_legal_exposure:
+            executing: "Checking legal exposure..."
+            deferred: "Check legal exposure"
+          score_portfolio:
+            executing: "Scoring portfolio..."
+            deferred: "Score portfolio"
+          submit_portfolio:
+            executing: "Submitting portfolio..."
+            deferred: "Submit portfolio"
+          get_current_guidance:
+            executing: "Retrieving board guidance..."
+            deferred: "Retrieve board guidance"
+          list_guidance:
+            executing: "Retrieving all guidance documents..."
+            deferred: "Retrieve all guidance documents"
+          set_active_guidance:
+            executing: "Setting active guidance..."
+            deferred: "Set active guidance"
+          create_guidance:
+            executing: "Creating new guidance..."
+            deferred: "Create new guidance"
+          update_guidance:
+            executing: "Updating guidance..."
+            deferred: "Update guidance"
+          delete_guidance:
+            executing: "Deleting guidance..."
+            deferred: "Delete guidance"
+      models:
+        small:
+          name: openai/gpt-oss-120b
+          ai_provider: chariot
+          organization_name: Chariot
+          project_name: OpenAI
+          reasoning: medium
+        medium:
+          name: openai/gpt-oss-120b
+          ai_provider: chariot
+          organization_name: Chariot
+          project_name: OpenAI
+          reasoning: high
+        large:
+          name: gpt-5.1
+          ai_provider: openai
+workflow:
+  - name: PE Acquisition Evaluation
+    key: pe-evaluation
+    description: A collection of agents that evaluate a company as an acquisition target.
+    agent_graph:
+      mode: delegation
+      agent_refs:
+        - id: Drafting Agent
+          ref: ::agent::drafting-agent::production
+        - id: Valuation Agent
+          ref: ::agent::valuation-agent::production
+        - id: Board Agent
+          ref: ::agent::board-agent::production
+      delegation_permissions:
+        Drafting Agent: [Valuation Agent]
+      supported_entry_agents: [Drafting Agent, Board Agent]
+agent:
+  - name: Drafting Agent
+    key: drafting-agent
+    description: Agent that assembles acquisition portfolios
+    model_settings: ::shared::pe-shared-data::production::data.models.medium
+    tool_profiles:
+      - ::tool-profile::drafting-tools::production
+    system_prompt:
+      |-
+      You are an agent that assembles an acquisition portfolio on a target company the user
+      wants to evaluate for acquisition. Use your research tools to gather the target's
+      financials, leadership profile, market landscape, operational metrics, and legal
+      exposure, then compose them into a portfolio. Your goal is for the portfolio to score
+      as high as possible when assessed. After you have made a draft of the portfolio, you
+      must have it assessed by handing it to the Valuation Agent.
+
+      The Valuation Agent will respond with your scores. If the scores are all
+      ::shared::pe-shared-data::production::data.acquisition_threshold or above, you may submit
+      the portfolio using the `submit_portfolio` tool, passing along both the portfolio and
+      the scores the Valuation Agent gave it.
+
+      If the user wants you to submit it, you must submit it, regardless of
+      what scores it has.
+
+      Important rules:
+        1. Portfolios should be no longer than ::shared::pe-shared-data::production::data.max_portfolio_length words.
+        2. Base every claim in the portfolio on data returned by your research tools; do not
+           invent figures.
+        3. No sycophancy. Be professional and short.
+  - name: Valuation Agent
+    key: valuation-agent
+    description: Agent that assesses acquisition portfolios
+    model_settings: ::shared::pe-shared-data::production::data.models.small
+    tool_profiles:
+      - ::tool-profile::valuation-tools::production
+    system_prompt:
+      |-
+      You are an acquisition valuation agent. Your job is to assess acquisition portfolios
+      according to the board of directors' guidance available. To retrieve that guidance, use
+      the `get_current_guidance` tool. You must ALWAYS get the guidance before you assess a
+      portfolio.
+
+      When you assess a portfolio against the guidance, you must score it according to each
+      category in the guidance on a scale from 0 to 100. Once you have determined your
+      assessment, use the `score_portfolio` tool to submit the scores.
+
+      In addition to submitting using the score_portfolio tool, please also respond with those
+      same scores to the user.
+  - name: Board Agent
+    key: board-agent
+    description: Agent that manages board guidance CRUD
+    model_settings: ::shared::pe-shared-data::production::data.models.small
+    tool_profiles:
+      - ::tool-profile::board-tools::production
+    system_prompt:
+      |-
+      You are an agent in charge of managing the board of directors' acquisition guidance
+      database. You are meant to help the user to create, update, delete and manage these
+      guidance documents. There is one guidance document in the database that is the "active"
+      one that is being used to actually assess acquisition portfolios. The rest are not
+      being used.
+
+      Your role is advisory -- only perform management of guidance at the user's request. If
+      anything is unclear, please clarify with the user before taking action.
+
+      No sycophancy.
+tool-profile:
+  - name: Drafting agent tools
+    key: drafting-tools
+    description: Tools for the drafter (company research + submit portfolio)
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::pe-valuation-mcp::production
+        tools:
+          include:
+            - get_company_financials
+            - get_leadership_profile
+            - get_market_landscape
+            - get_operational_metrics
+            - get_legal_exposure
+            - submit_portfolio
+    artifact_tools:
+      include:
+        - submit_portfolio
+        - get_company_financials
+        - get_leadership_profile
+        - get_market_landscape
+        - get_operational_metrics
+        - get_legal_exposure
+    tool_display: ::shared::pe-shared-data::production::data.tool_display
+    retries: 3
+    timeout_seconds: 30
+  - name: Valuation agent tools
+    key: valuation-tools
+    description: Tools for the valuation agent
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::pe-valuation-mcp::production
+        tools:
+          include:
+            - score_portfolio
+            - get_current_guidance
+    artifact_tools:
+      include:
+        - score_portfolio
+    tool_display: ::shared::pe-shared-data::production::data.tool_display
+    retries: 3
+    timeout_seconds: 30
+  - name: Board agent tools
+    key: board-tools
+    description: Tools for the board agent
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::pe-valuation-mcp::production
+        tools:
+          include:
+            - get_current_guidance
+            - set_active_guidance
+            - create_guidance
+            - list_guidance
+            - update_guidance
+            - delete_guidance
+    approval_policy:
+      include:
+        - name: update_guidance
+        - name: delete_guidance
+        - name: set_active_guidance
+    tool_display: ::shared::pe-shared-data::production::data.tool_display
+    retries: 3
+    timeout_seconds: 30
+mcp-connection:
+  - name: PE valuation toolset
+    key: pe-valuation-mcp
+    description: MCP service that handles board guidance state, portfolio scoring, and synthetic company research data.
+    transport: streamable_http
+    endpoint: https://c2n-integration-chariot.palantirgov.com/portalvsc/nb-3h3zoegaqjdbnijvcymaiepr3mn-demo-mcp/proxy/8000/mcp
+    auth:
+      add_chariot_token_to_headers: true
+    retries: 3
+    timeout: 10

@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block title %}Add data{% endblock %}
+{% block body %}
+{% if job %}
+<p class="notice ok">Queued {{ job.kind }} as {{ job.status }}. Job <code>{{ job.id }}</code>.
+  {% if job.payload.reports is defined %}{{ job.payload.reports | length }} reports stored.{% endif %}
+  {% if job.kind == "ingest_ais" and job.payload.size_bytes %}{{ job.payload.size_bytes }} bytes staged for database ingest.{% endif %}
+  {% if job.payload.records is defined %}{{ job.payload.records | length }} ownership records queued.{% endif %}
+  {% if job.payload.skipped %}{{ job.payload.skipped }} reports skipped because they had no MMSI or no usable timestamp.{% endif %}
+  <a href="/">View recent jobs</a></p>
+{% endif %}
+{% if error %}
+<p class="notice error">{{ error }}</p>
+{% endif %}
+
+<section class="panel">
+  <h2 style="margin-top:0; font-size:1.05rem;">Add data</h2>
+  <p class="meta">Each submission queues an ingest job. A successful job then queues fusion.</p>
+
+  <input type="radio" name="kind" id="kind-imagery" {% if kind == "imagery" %}checked{% endif %}>
+  <input type="radio" name="kind" id="kind-watchpoint" {% if kind == "watchpoint" %}checked{% endif %}>
+  <input type="radio" name="kind" id="kind-fmv" {% if kind == "fmv" %}checked{% endif %}>
+  <input type="radio" name="kind" id="kind-timeseries" {% if kind == "timeseries" %}checked{% endif %}>
+  <input type="radio" name="kind" id="kind-ais" {% if kind == "ais" %}checked{% endif %}>
+  <input type="radio" name="kind" id="kind-ownership" {% if kind == "ownership" %}checked{% endif %}>
+  <input type="radio" name="kind" id="kind-osint" {% if kind == "osint" %}checked{% endif %}>
+  <input type="radio" name="kind" id="kind-intel" {% if kind == "intel" %}checked{% endif %}>
+
+  <div class="kinds">
+    <label for="kind-imagery">Imagery</label>
+    <label for="kind-watchpoint">Watch point</label>
+    <label for="kind-fmv">FMV</label>
+    <label for="kind-timeseries">Time series</label>
+    <label for="kind-ais">AIS</label>
+    <label for="kind-ownership">Ownership</label>
+    <label for="kind-osint">OSINT</label>
+    <label for="kind-intel">Intel</label>
+  </div>
+
+  <form class="kind imagery" method="post" action="/ingest/imagery" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div class="wide">
+        <label for="image-file">Image file</label>
+        <input id="image-file" name="file" type="file" required>
+      </div>
+      <div>
+        <label for="image-modality">Modality</label>
+        <select id="image-modality" name="modality" required>
+          <option value="eo">Electro-optical</option>
+          <option value="sar">SAR</option>
+          <option value="ir">Infrared</option>
+          <option value="lidar">Lidar</option>
+          <option value="fmv">FMV</option>
+        </select>
+      </div>
+      <div>
+        <label for="image-external">External id</label>
+        <input id="image-external" name="external_id">
+      </div>
+      <div>
+        <label for="image-time">Captured at</label>
+        <input id="image-time" name="captured_at" placeholder="2026-03-01T12:00:00Z">
+      </div>
+      <div>
+        <label for="image-lat">Latitude</label>
+        <input id="image-lat" name="latitude" inputmode="decimal">
+      </div>
+      <div>
+        <label for="image-lon">Longitude</label>
+        <input id="image-lon" name="longitude" inputmode="decimal">
+      </div>
+      <div class="wide">
+        <label for="image-metadata">Metadata JSON</label>
+        <textarea id="image-metadata" name="metadata">{}</textarea>
+      </div>
+      <div class="wide">
+        <label for="image-footprint">Footprint JSON</label>
+        <textarea id="image-footprint" name="footprint" placeholder='{"type":"Polygon","coordinates":[]}'></textarea>
+      </div>
+      <div class="wide"><button type="submit">Queue imagery</button></div>
+    </div>
+  </form>
+
+  <form class="kind watchpoint" method="post" action="/ingest/watchpoint">
+    <div class="form-grid">
+      <div>
+        <label for="watchpoint-id">Watch point id</label>
+        <input id="watchpoint-id" name="watchpoint_id" required>
+      </div>
+      <div>
+        <label for="watchpoint-project">Project id</label>
+        <input id="watchpoint-project" name="project_id" required>
+      </div>
+      <div>
+        <label for="watchpoint-start">From</label>
+        <input id="watchpoint-start" name="time_start" placeholder="2026-03-01T00:00:00Z">
+      </div>
+      <div>
+        <label for="watchpoint-end">To</label>
+        <input id="watchpoint-end" name="time_end" placeholder="2026-03-02T00:00:00Z">
+      </div>
+      <div class="wide"><button type="submit">Queue watch point</button></div>
+    </div>
+  </form>
+
+  <form class="kind fmv" method="post" action="/ingest/fmv">
+    <div class="form-grid">
+      <div>
+        <label for="fmv-model">Model id</label>
+        <input id="fmv-model" name="model_id" required>
+      </div>
+      <div>
+        <label for="fmv-feed">Feed id</label>
+        <input id="fmv-feed" name="feed_id" required>
+      </div>
+      <div>
+        <label for="fmv-start">From</label>
+        <input id="fmv-start" name="time_start" placeholder="2026-03-01T00:00:00Z">
+      </div>
+      <div>
+        <label for="fmv-end">To</label>
+        <input id="fmv-end" name="time_end" placeholder="2026-03-01T01:00:00Z">
+      </div>
+      <div class="wide"><button type="submit">Queue FMV</button></div>
+    </div>
+  </form>
+
+  <form class="kind timeseries" method="post" action="/ingest/timeseries" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div>
+        <label for="series-modality">Modality</label>
+        <select id="series-modality" name="modality" required>
+          <option value="radar">Radar</option>
+          <option value="elint">ELINT</option>
+          <option value="acoustic">Acoustic</option>
+        </select>
+      </div>
+      <div>
+        <label for="series-source">Source id</label>
+        <input id="series-source" name="source_id" placeholder="Required unless the file is ELINT JSON">
+      </div>
+      <div>
+        <label for="series-time">Captured at</label>
+        <input id="series-time" name="captured_at" placeholder="2026-03-01T12:00:00Z">
+      </div>
+      <div>
+        <label for="series-file">Audio, signal, or ELINT JSON file</label>
+        <input id="series-file" name="file" type="file" accept="application/json,.json,audio/*">
+      </div>
+      <div>
+        <label for="series-lat">Latitude</label>
+        <input id="series-lat" name="latitude" inputmode="decimal">
+      </div>
+      <div>
+        <label for="series-lon">Longitude</label>
+        <input id="series-lon" name="longitude" inputmode="decimal">
+      </div>
+      <div class="wide">
+        <label for="series-samples">Samples JSON</label>
+        <textarea id="series-samples" name="samples" placeholder='[{"time":"2026-03-01T12:00:00Z","value":1.4,"channel":"doppler","latitude":21.3,"longitude":-157.8}]'></textarea>
+      </div>
+      <p class="meta wide">An ELINT JSON file with elint_intercept_collection is stored as one signal sample per intercept. The correlated MMSI, IMO, and vessel name are kept so fusion can compare the emitter with AIS and ownership.</p>
+      <div class="wide"><button type="submit">Queue time series</button></div>
+    </div>
+  </form>
+
+  <form class="kind ais" method="post" action="/ingest/ais" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div class="wide">
+        <label for="ais-file">AIS JSON file</label>
+        <input id="ais-file" name="file" type="file" accept="application/json,.json">
+      </div>
+      <div class="wide">
+        <label for="ais-reports">Or paste AIS JSON</label>
+        <textarea id="ais-reports" name="reports" placeholder='{"MMSI":"257465900","TSTAMP":"2024-11-19 20:28:06 GMT","LATITUDE":"63.43565","LONGITUDE":"10.39761","COG":"137.6","SOG":"0","HEADING":"511","NAVSTAT":"15","IMO":"0","NAME":"D/S HANSTEEN","CALLSIGN":"LDQF","TYPE":"60","A":"20","B":"10","C":"3","D":"2","DRAUGHT":"0","DEST":"","ETA":"00-00 00:00"}'></textarea>
+      </div>
+      <p class="meta wide">Upload or paste one report, a JSON array, or {"reports": [...]}. Standard feed names such as MMSI, TSTAMP, SOG, and DEST are accepted. Rows without an MMSI or timestamp are skipped. Other missing fields are left empty.</p>
+      <div class="wide"><button type="submit">Queue AIS</button></div>
+    </div>
+  </form>
+
+  <form class="kind ownership" method="post" action="/ingest/ownership" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div>
+        <label for="ownership-dataset">Dataset name</label>
+        <input id="ownership-dataset" name="dataset" value="vessel_ownership">
+      </div>
+      <div>
+        <label for="ownership-file">Ownership JSON file</label>
+        <input id="ownership-file" name="file" type="file" accept="application/json,.json">
+      </div>
+      <div class="wide">
+        <label for="ownership-records">Or paste ownership JSON</label>
+        <textarea id="ownership-records" name="records" placeholder='[{"vessel_name":"ADLER","imo":"9179854","mmsi":"273414440","call_sign":"UGPS","flag_current":"russian federation","vessel_type":"Ro-Ro Cargo Ship","sanctions":"USA","source_url":"https://example.test/vessels/1"}]'></textarea>
+      </div>
+      <p class="meta wide">Upload a JSON array of vessel records. Rows are matched by source URL, so uploading the same file again updates those vessels. Search them with search_ownership.</p>
+      <div class="wide"><button type="submit">Queue ownership</button></div>
+    </div>
+  </form>
+
+  <form class="kind osint" method="post" action="/ingest/osint" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div class="wide">
+        <label for="osint-file">OSINT report file</label>
+        <input id="osint-file" name="file" type="file" accept="text/plain,application/json,.txt,.json,.md">
+      </div>
+      <div class="wide">
+        <label for="osint-report">Or paste the report</label>
+        <textarea id="osint-report" name="report" placeholder="OSINT MARITIME MONITORING REPORT&#10;Vessel Identified: MV EXAMPLE (IMO: 1234567)"></textarea>
+      </div>
+      <p class="meta wide">Paste a narrative report or a JSON report with a body. Vessel name, IMO, MMSI, dates, and coordinates are extracted and stored for search_osint.</p>
+      <div class="wide"><button type="submit">Queue OSINT</button></div>
+    </div>
+  </form>
+
+  <form class="kind intel" method="post" action="/ingest/intel" enctype="multipart/form-data">
+    <div class="form-grid">
+      <div class="wide">
+        <label for="intel-file">Intel report file</label>
+        <input id="intel-file" name="file" type="file" accept="text/plain,application/json,.txt,.json,.md">
+      </div>
+      <div class="wide">
+        <label for="intel-report">Or paste the report</label>
+        <textarea id="intel-report" name="report" placeholder="INTELLIGENCE ASSESSMENT&#10;Subject: Captain EXAMPLE – Master of MV EXAMPLE (IMO: 1234567)"></textarea>
+      </div>
+      <p class="meta wide">Paste an intelligence assessment or a JSON report with a body. Person, vessel, IMO, status, and dates are extracted and stored for search_intel_reports.</p>
+      <div class="wide"><button type="submit">Queue intel report</button></div>
+    </div>
+  </form>
+</section>
+{% endblock %}

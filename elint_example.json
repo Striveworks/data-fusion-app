@@ -1,0 +1,784 @@
+{
+    "elint_intercept_collection": [
+        {
+            "intercept_id": "EL-20241119-1800B",
+            "timestamp": "2024-11-19T20:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02349,
+                "longitude": 54.40284,
+                "ellipse_semi_major_axis_m": 127.6,
+                "ellipse_semi_minor_axis_m": 87.0,
+                "ellipse_orientation_deg": 76.0,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9382.59,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.46,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 23.4
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.92
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1800C",
+            "timestamp": "2024-11-19T21:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02511,
+                "longitude": 54.55284,
+                "ellipse_semi_major_axis_m": 163.4,
+                "ellipse_semi_minor_axis_m": 65.0,
+                "ellipse_orientation_deg": 24.4,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3058.55,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.45,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 20.1
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.97
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1800D",
+            "timestamp": "2024-11-19T21:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02341,
+                "longitude": 54.70284,
+                "ellipse_semi_major_axis_m": 150.2,
+                "ellipse_semi_minor_axis_m": 77.3,
+                "ellipse_orientation_deg": 87.9,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9433.39,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.21,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 24.3
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1800E",
+            "timestamp": "2024-11-19T22:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02446,
+                "longitude": 54.85284,
+                "ellipse_semi_major_axis_m": 128.8,
+                "ellipse_semi_minor_axis_m": 79.5,
+                "ellipse_orientation_deg": 41.7,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3034.19,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.37,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 19.3
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1800F",
+            "timestamp": "2024-11-19T22:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02482,
+                "longitude": 55.00284,
+                "ellipse_semi_major_axis_m": 178.6,
+                "ellipse_semi_minor_axis_m": 82.2,
+                "ellipse_orientation_deg": 57.0,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9390.87,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.11,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 15.6
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.89
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18010",
+            "timestamp": "2024-11-19T23:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02324,
+                "longitude": 55.15284,
+                "ellipse_semi_major_axis_m": 128.5,
+                "ellipse_semi_minor_axis_m": 88.3,
+                "ellipse_orientation_deg": 139.6,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3020.19,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.45,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 22.3
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18011",
+            "timestamp": "2024-11-19T23:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02484,
+                "longitude": 55.30284,
+                "ellipse_semi_major_axis_m": 182.1,
+                "ellipse_semi_minor_axis_m": 87.7,
+                "ellipse_orientation_deg": 178.6,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9400.12,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.51,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 16.9
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18012",
+            "timestamp": "2024-11-20T00:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02492,
+                "longitude": 55.45284,
+                "ellipse_semi_major_axis_m": 139.8,
+                "ellipse_semi_minor_axis_m": 72.8,
+                "ellipse_orientation_deg": 133.5,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3040.66,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.45,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 19.3
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.88
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18013",
+            "timestamp": "2024-11-20T00:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02346,
+                "longitude": 55.60284,
+                "ellipse_semi_major_axis_m": 164.5,
+                "ellipse_semi_minor_axis_m": 86.8,
+                "ellipse_orientation_deg": 76.5,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9394.31,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.58,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 18.0
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18014",
+            "timestamp": "2024-11-20T01:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02456,
+                "longitude": 55.75284,
+                "ellipse_semi_major_axis_m": 126.9,
+                "ellipse_semi_minor_axis_m": 85.2,
+                "ellipse_orientation_deg": 139.9,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3087.41,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.37,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 16.6
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.95
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18015",
+            "timestamp": "2024-11-20T01:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02444,
+                "longitude": 55.90284,
+                "ellipse_semi_major_axis_m": 174.9,
+                "ellipse_semi_minor_axis_m": 66.5,
+                "ellipse_orientation_deg": 38.6,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9385.55,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.59,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 18.2
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.89
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18016",
+            "timestamp": "2024-11-20T02:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.0247,
+                "longitude": 56.05284,
+                "ellipse_semi_major_axis_m": 169.8,
+                "ellipse_semi_minor_axis_m": 63.8,
+                "ellipse_orientation_deg": 41.2,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3020.89,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.51,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 16.5
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18017",
+            "timestamp": "2024-11-20T02:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02472,
+                "longitude": 56.20284,
+                "ellipse_semi_major_axis_m": 185.3,
+                "ellipse_semi_minor_axis_m": 67.9,
+                "ellipse_orientation_deg": 87.2,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9413.72,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.15,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 15.6
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.92
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18018",
+            "timestamp": "2024-11-20T03:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02324,
+                "longitude": 56.35284,
+                "ellipse_semi_major_axis_m": 169.3,
+                "ellipse_semi_minor_axis_m": 82.2,
+                "ellipse_orientation_deg": 35.8,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3020.35,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.53,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 19.6
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-18019",
+            "timestamp": "2024-11-20T03:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02488,
+                "longitude": 56.50284,
+                "ellipse_semi_major_axis_m": 149.3,
+                "ellipse_semi_minor_axis_m": 88.5,
+                "ellipse_orientation_deg": 105.7,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9425.26,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.44,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 22.0
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1801A",
+            "timestamp": "2024-11-20T04:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.0245,
+                "longitude": 56.65284,
+                "ellipse_semi_major_axis_m": 128.7,
+                "ellipse_semi_minor_axis_m": 72.5,
+                "ellipse_orientation_deg": 24.3,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3051.48,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.2,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 25.1
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.89
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1801B",
+            "timestamp": "2024-11-20T04:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02422,
+                "longitude": 56.80284,
+                "ellipse_semi_major_axis_m": 196.3,
+                "ellipse_semi_minor_axis_m": 61.1,
+                "ellipse_orientation_deg": 28.5,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9412.38,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.51,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 19.3
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.88
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1801C",
+            "timestamp": "2024-11-20T05:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.0242,
+                "longitude": 56.95284,
+                "ellipse_semi_major_axis_m": 158.4,
+                "ellipse_semi_minor_axis_m": 88.0,
+                "ellipse_orientation_deg": 4.5,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3088.36,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.45,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 22.1
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.94
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1801D",
+            "timestamp": "2024-11-20T05:37:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.02421,
+                "longitude": 57.10284,
+                "ellipse_semi_major_axis_m": 169.5,
+                "ellipse_semi_minor_axis_m": 72.8,
+                "ellipse_orientation_deg": 41.5,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 9439.42,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 1500.0,
+                "pulse_repetition_interval_ms": 0.667,
+                "pulse_width_us": 0.08,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.54,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 27.2
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-X01",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "X_BAND",
+                "confidence_score": 0.93
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        },
+        {
+            "intercept_id": "EL-20241119-1801E",
+            "timestamp": "2024-11-20T06:07:14Z",
+            "emitter_status": "ACTIVE",
+            "geolocation": {
+                "latitude": 26.0247,
+                "longitude": 57.25284,
+                "ellipse_semi_major_axis_m": 128.7,
+                "ellipse_semi_minor_axis_m": 69.0,
+                "ellipse_orientation_deg": 108.5,
+                "altitude_m": 0.0
+            },
+            "signal_parametric_data": {
+                "frequency_mhz": 3043.86,
+                "frequency_modulation": "UNMODULATED_CW_PULSE",
+                "pulse_repetition_frequency_hz": 750.0,
+                "pulse_repetition_interval_ms": 1.333,
+                "pulse_width_us": 0.25,
+                "antenna_scan_type": "CONTINUOUS_360",
+                "antenna_scan_period_sec": 2.55,
+                "polarization": "HORIZONTAL",
+                "signal_to_noise_ratio_db": 16.0
+            },
+            "emitter_identification": {
+                "matched_elnot": "R-NAV-S04",
+                "functional_class": "MARINE_NAVIGATION_RADAR",
+                "frequency_band": "S_BAND",
+                "confidence_score": 0.9
+            },
+            "correlated_platform": {
+                "platform_type": "VESSEL",
+                "automatic_identification_system": {
+                    "mmsi": "431938000",
+                    "name": "HAKUSAN",
+                    "imo": "9535058",
+                    "heading_deg": 91.0
+                }
+            }
+        }
+    ]
+}

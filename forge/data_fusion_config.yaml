@@ -1,0 +1,276 @@
+# Data fusion orchestrator. All agent prompts live in this file.
+# Parameters are substituted by chariot.awm.config_import.apply_parameters.
+parameters:
+  mcp_endpoint: http://localhost:8000/mcp/
+  llm_name: google/gemma-4-26B-A4B-it
+  llm_provider: chariot
+  llm_organization: Striveworks
+  llm_project: Google
+shared:
+  - name: Fusion shared data
+    key: fusion-shared
+    description: Models and tool display strings for the data fusion workflow
+    data:
+      models:
+        medium:
+          name: "{llm_name}"
+          ai_provider: "{llm_provider}"
+          organization_name: "{llm_organization}"
+          project_name: "{llm_project}"
+          reasoning: medium
+      tool_display:
+        templates:
+          search_assets:
+            executing: "Searching stored imagery..."
+            deferred: "Search stored imagery"
+          search_detections:
+            executing: "Searching detections..."
+            deferred: "Search detections"
+          search_triage_events:
+            executing: "Searching triage events..."
+            deferred: "Search triage events"
+          query_timeseries:
+            executing: "Querying time series..."
+            deferred: "Query time series"
+          measure_distance:
+            executing: "Measuring distance..."
+            deferred: "Measure distance"
+          associate_tracks:
+            executing: "Associating tracks..."
+            deferred: "Associate tracks"
+          pattern_of_life:
+            executing: "Building pattern of life..."
+            deferred: "Build pattern of life"
+          search_ais:
+            executing: "Searching AIS reports..."
+            deferred: "Search AIS reports"
+          search_insights:
+            executing: "Searching insights..."
+            deferred: "Search insights"
+          upsert_insight:
+            executing: "Writing insight..."
+            deferred: "Write insight"
+          correct_insight:
+            executing: "Correcting insight..."
+            deferred: "Correct insight"
+          describe_imagery:
+            executing: "Describing imagery..."
+            deferred: "Describe imagery"
+          search_intel_reports:
+            executing: "Searching intel reports..."
+            deferred: "Search intel reports"
+          search_ownership:
+            executing: "Searching ownership records..."
+            deferred: "Search ownership records"
+          search_osint:
+            executing: "Searching open sources..."
+            deferred: "Search open sources"
+workflow:
+  - name: Data Fusion
+    key: data-fusion
+    description: Orchestrates stored observations into insights and corrects earlier statements when new evidence arrives.
+    agent_graph:
+      mode: delegation
+      agent_refs:
+        - id: Data Fusion Orchestrator
+          ref: ::agent::fusion-orchestrator::production
+        - id: Intel Report Search Agent
+          ref: ::agent::intel-report-agent::production
+        - id: Ownership Database Agent
+          ref: ::agent::ownership-agent::production
+        - id: PAI CAI OSINT Agent
+          ref: ::agent::osint-agent::production
+        - id: VLM Agent
+          ref: ::agent::vlm-agent::production
+      delegation_permissions:
+        Data Fusion Orchestrator:
+          - Intel Report Search Agent
+          - Ownership Database Agent
+          - PAI CAI OSINT Agent
+          - VLM Agent
+      supported_entry_agents: [Data Fusion Orchestrator]
+agent:
+  - name: Data Fusion Orchestrator
+    key: fusion-orchestrator
+    description: Correlates detections, tracks, signals, AIS reports, and prior insights.
+    model_settings: ::shared::fusion-shared::production::data.models.medium
+    tool_profiles:
+      - ::tool-profile::orchestrator-tools::production
+    system_prompt:
+      |-
+      You are the data fusion orchestrator. You receive newly stored evidence identifiers
+      and produce higher-level insights about specific entities, places, or time ranges.
+
+      Before writing anything, search existing active insights for the same entities, places,
+      and time ranges. If new evidence contradicts an active insight, call correct_insight
+      and keep the prior statement as history. If the evidence supports a new conclusion,
+      call upsert_insight. Attach the evidence identifiers you actually used.
+
+      Use search_detections, search_assets, search_triage_events, query_timeseries, and
+      search_ais to read stored observations. query_timeseries returns ELINT intercepts
+      as well as radar and acoustic samples. For ELINT, source_id is the correlated
+      MMSI, channel is the ELNOT, and vessel_name, imo, and elnot are on each row.
+      search_ais returns vessel identity, position,
+      course, speed, and destination. Use measure_distance when spatial separation matters.
+      Use associate_tracks when detections may be the same moving object. Use
+      pattern_of_life to summarize repeated activity.
+
+      A large AIS ingest notification is only a compact locator summary. The observations
+      are already stored in Postgres; never ask for or expect the uploaded JSON in the
+      message. Inspect it with pattern_of_life first, then make narrow search_ais calls
+      using a time window, MMSI, vessel name, IMO, or destination. Keep search limits at
+      25 unless a specific question requires more, and never try to retrieve an entire
+      AIS dataset into the model context.
+
+      Imagery evidence may already include detection labels, scores, boxes, and a
+      vision-model description. Write the insight from those outputs. Delegate to
+      the VLM Agent only when the evidence has no visual_description and
+      visual_description_status is not detection_only.
+
+      Every ingest message may include aggregate_context populated by deterministic
+      searches across active insights, vessel ownership records, AIS reports,
+      stored OSINT reports, and intel reports. Reason over every non-empty match.
+      Include material identity, ownership, sanctions, AIS facts, OSINT findings,
+      and intel-report findings while clearly
+      distinguishing database records from direct observations. Empty match lists
+      mean that holding was searched and had
+      no match. When a prior active insight covers the same entity, call
+      correct_insight to enrich it rather than creating a duplicate.
+
+      Delegate to the Intel Report Search Agent, Ownership Database Agent, or
+      PAI CAI OSINT Agent when corroboration would change the conclusion. If a tool
+      or delegate returns status unconfigured or an empty result list, say that the
+      source was unavailable. Do not invent reports, owners, detections, coordinates,
+      or times.
+
+      Every insight must name the entity, place, or time period it answers, and must
+      stay within the evidence you retrieved.
+  - name: Intel Report Search Agent
+    key: intel-report-agent
+    description: Searches intel reports for corroboration.
+    model_settings: ::shared::fusion-shared::production::data.models.medium
+    tool_profiles:
+      - ::tool-profile::intel-tools::production
+    system_prompt:
+      |-
+      You search stored intel reports for the question the orchestrator asks.
+      Call search_intel_reports and return its result unchanged in substance.
+      Status ok means the intel table was searched. An empty results list means
+      no report matched. If status is unconfigured, say the intel report source
+      is unavailable. Do not invent report titles, quotations, or findings.
+  - name: Ownership Database Agent
+    key: ownership-agent
+    description: Searches ownership records for corroboration.
+    model_settings: ::shared::fusion-shared::production::data.models.medium
+    tool_profiles:
+      - ::tool-profile::ownership-tools::production
+    system_prompt:
+      |-
+      You search stored vessel ownership records for the question the orchestrator asks.
+      Call search_ownership and return its result unchanged in substance. Status ok
+      means the registry was searched. An empty results list means no vessel matched.
+      If status is unconfigured, say the ownership source is unavailable. Do not invent
+      owners, flags, sanctions, or registrations.
+  - name: PAI CAI OSINT Agent
+    key: osint-agent
+    description: Searches publicly available and open-source information.
+    model_settings: ::shared::fusion-shared::production::data.models.medium
+    tool_profiles:
+      - ::tool-profile::osint-tools::production
+    system_prompt:
+      |-
+      You search stored OSINT reports for the question the orchestrator asks.
+      Call search_osint and return its result unchanged in substance. Status ok
+      means the OSINT table was searched. An empty results list means no report
+      matched. If status is unconfigured, say the open-source source is unavailable.
+      Do not invent articles, sightings, or social media posts.
+  - name: VLM Agent
+    key: vlm-agent
+    description: Describes stored imagery through a Chariot vision model.
+    model_settings: ::shared::fusion-shared::production::data.models.medium
+    tool_profiles:
+      - ::tool-profile::vlm-tools::production
+    system_prompt:
+      |-
+      You describe stored imagery. Call describe_imagery with the asset id the
+      orchestrator provides. Return the tool result. If status is unconfigured or
+      the description is missing, say the vision model is unavailable. Do not
+      describe objects you did not receive from the tool. Use search_assets only
+      to resolve which asset id to describe.
+tool-profile:
+  - name: Orchestrator tools
+    key: orchestrator-tools
+    description: Read stored observations and write or correct insights
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::fusion-mcp::production
+        tools:
+          include:
+            - search_assets
+            - search_detections
+            - search_triage_events
+            - query_timeseries
+            - search_ais
+            - measure_distance
+            - associate_tracks
+            - pattern_of_life
+            - search_insights
+            - upsert_insight
+            - correct_insight
+    tool_display: ::shared::fusion-shared::production::data.tool_display
+    retries: 3
+    timeout_seconds: 60
+  - name: Intel report tools
+    key: intel-tools
+    description: Intel report search
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::fusion-mcp::production
+        tools:
+          include:
+            - search_intel_reports
+    tool_display: ::shared::fusion-shared::production::data.tool_display
+    retries: 3
+    timeout_seconds: 30
+  - name: Ownership tools
+    key: ownership-tools
+    description: Ownership database search
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::fusion-mcp::production
+        tools:
+          include:
+            - search_ownership
+    tool_display: ::shared::fusion-shared::production::data.tool_display
+    retries: 3
+    timeout_seconds: 30
+  - name: OSINT tools
+    key: osint-tools
+    description: PAI CAI OSINT search
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::fusion-mcp::production
+        tools:
+          include:
+            - search_osint
+    tool_display: ::shared::fusion-shared::production::data.tool_display
+    retries: 3
+    timeout_seconds: 30
+  - name: VLM tools
+    key: vlm-tools
+    description: Vision description of stored imagery
+    mcp_tools:
+      - mcp_connection: ::mcp-connection::fusion-mcp::production
+        tools:
+          include:
+            - describe_imagery
+            - search_assets
+    tool_display: ::shared::fusion-shared::production::data.tool_display
+    retries: 3
+    timeout_seconds: 120
+mcp-connection:
+  - name: Fusion data tools
+    key: fusion-mcp
+    description: MCP server for fusion stores, insight writes, and unconfigured corroboration sources.
+    transport: streamable_http
+    endpoint: "{mcp_endpoint}"
+    auth:
+      add_chariot_token_to_headers: true
+    retries: 3
+    timeout: 30
